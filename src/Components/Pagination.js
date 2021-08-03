@@ -15,6 +15,12 @@ const Pagination = ({ total, splitPrint, currentIndex, setCurrentIndex }) => {
     setCurrentIndex(currentValue);
   }
 
+  const onClickPrevNextIndex = (e) => {
+    const currentValue = e.target.getAttribute('value');
+    const moveIndex = parseInt(currentIndex) + parseInt(currentValue);
+    (0 < moveIndex && moveIndex <= lastPages) && setCurrentIndex(moveIndex);
+  }
+
   useEffect(() => {
     5 > currentIndex > 0 ? setBtnSliceArray(totalBtn.slice(0, 5))
       : currentIndex > lastPages - 4 ? setBtnSliceArray(totalBtn.slice(lastPages - 7, lastPages))
@@ -26,11 +32,13 @@ const Pagination = ({ total, splitPrint, currentIndex, setCurrentIndex }) => {
   return (
     <>
       <div className='paginateBtn' style={{ display: 'flex' }}>
+        <div onClick={onClickPrevNextIndex} value={-1} key={'prev'}>{'<'}</div>
         <div onClick={onClickCurrentIndex} value={1} key={1}>{1}</div>
         {(currentIndex > lastPages - 4 || (lastPages - 3 > currentIndex && currentIndex > 4)) && <div>...</div>}
         <PagenateGen btnSliceArray={btnSliceArray} onClickCurrentIndex={onClickCurrentIndex} />
         {(5 > currentIndex > 0 || (lastPages - 3 > currentIndex && currentIndex > 4)) && <div>...</div>}
         <div onClick={onClickCurrentIndex} value={lastPages} key={lastPages}>{lastPages}</div>
+        <div onClick={onClickPrevNextIndex} value={1} key={'next'}>{'>'}</div>
       </div>
     </>
   )
